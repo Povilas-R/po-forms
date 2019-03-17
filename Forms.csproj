@@ -24,8 +24,7 @@
     <DocumentationFile>
     </DocumentationFile>
     <LangVersion>7.3</LangVersion>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>CS1573, CS1591</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -37,8 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>7.3</LangVersion>
     <DocumentationFile>..\bin\Po.Forms.xml</DocumentationFile>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>CS1573, CS1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
