@@ -7,28 +7,28 @@ namespace Po.Forms.Logging
     /// <summary>
     /// Class for logging information throughout the entire application.
     /// </summary>
-	public static class Logger
-	{
+    public static class Logger
+    {
         /// <summary>
         /// Date pattern for logging to text box. Default: "[HH:mm:ss] "
         /// </summary>
-		public static string LogBoxDatePattern = "[HH:mm:ss] ";
+        public static string LogBoxDatePattern = "[HH:mm:ss] ";
         /// <summary>
         /// Date pattern for logging to message box. Default: "[HH:mm:ss] "
         /// </summary>
-		public static string MessageDatePattern = "[HH:mm:ss] ";
+        public static string MessageDatePattern = "[HH:mm:ss] ";
         /// <summary>
         /// Date pattern for logging to file. Default: "[HH:mm:ss] "
         /// </summary>
-		public static string RecordDatePattern = "[HH:mm:ss] ";
+        public static string RecordDatePattern = "[HH:mm:ss] ";
         /// <summary>
         /// Date pattern for log file name. Default: "[yyyy-MM-dd] "
         /// </summary>
-		public static string LogNameDatePattern = "[yyyy-MM-dd] ";
+        public static string LogNameDatePattern = "[yyyy-MM-dd] ";
         /// <summary>
         /// Log file name. Default: "Log.txt"
         /// </summary>
-		public static string LogFileName = "Log.txt";
+        public static string LogFileName = "Log.txt";
 
         /// <summary>
         /// Default <see cref="TextBox"/> for logging.
@@ -147,51 +147,51 @@ namespace Po.Forms.Logging
         /// Pops a <see cref="MessageBox"/> with the given info and writes it to file.
         /// </summary>
         public static void ShowMessage(string info)
-		{
-			if (info == null || info.Trim().Length == 0)
-			{
-				return;
-			}
+        {
+            if (info == null || info.Trim().Length == 0)
+            {
+                return;
+            }
 
-			LogToFile(GetInfoLine(RecordDatePattern, info));
-			MessageBox.Show(GetInfoLine(MessageDatePattern, info));
-		}
+            LogToFile(GetInfoLine(RecordDatePattern, info));
+            MessageBox.Show(GetInfoLine(MessageDatePattern, info));
+        }
 
         /// <summary>
         /// Writes the given info to file.
         /// </summary>
-		public static bool LogToFile(string info) => LogToFile(info, out _);
+        public static bool LogToFile(string info) => LogToFile(info, out _);
         /// <summary>
         /// Writes the given info to file.
         /// </summary>
-		public static bool LogToFile(string info, out string exceptionMessage)
-		{
-			exceptionMessage = null;
-			if (info == null || info.Trim().Length == 0)
-			{
-				return true;
-			}
+        public static bool LogToFile(string info, out string exceptionMessage)
+        {
+            exceptionMessage = null;
+            if (info == null || info.Trim().Length == 0)
+            {
+                return true;
+            }
 
-			try
-			{
-				File.AppendAllText(
-					(!string.IsNullOrEmpty(LogNameDatePattern) 
-					? DateTime.Now.ToString(LogNameDatePattern)
-					: "") + LogFileName, 
-					GetInfoLine(RecordDatePattern, info));
-				return true;
-			}
-			catch (Exception ex)
-			{
-				exceptionMessage = $"Error logging to file: {ex.Message}";
-				return false;
-			}
-		}
+            try
+            {
+                File.AppendAllText(
+                    (!string.IsNullOrEmpty(LogNameDatePattern)
+                    ? DateTime.Now.ToString(LogNameDatePattern)
+                    : "") + LogFileName,
+                    GetInfoLine(RecordDatePattern, info));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                exceptionMessage = $"Error logging to file: {ex.Message}";
+                return false;
+            }
+        }
 
-		public static string GetInfoLine(string datePattern, string text)
-		{
-			return
-				DateTime.Now.ToString(datePattern) + text + Environment.NewLine;
-		}
-	}
+        public static string GetInfoLine(string datePattern, string text)
+        {
+            return
+                DateTime.Now.ToString(datePattern) + text + Environment.NewLine;
+        }
+    }
 }

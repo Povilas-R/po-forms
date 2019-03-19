@@ -85,6 +85,7 @@
     <Compile Include="Charting\Series\Series.cs" />
     <Compile Include="Charting\Series\SeriesCurveType.cs" />
     <Compile Include="Threading\ThreadService\Events.cs" />
+    <Compile Include="Threading\ThreadService\Dispose.cs" />
     <Compile Include="Threading\ThreadService\ThreadService.cs" />
     <Compile Include="UtilityExtensions.cs" />
   </ItemGroup>
