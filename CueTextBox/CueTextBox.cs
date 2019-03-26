@@ -14,7 +14,10 @@ namespace Po.Forms
         /// </summary>
         public CueTextBox() : base()
         {
-            KeyPress += FilterKeys;
+            if (!DesignMode)
+            {
+                KeyPress += FilterKeys;
+            }
         }
 
         private bool _onlyAllowNumbers = false;
