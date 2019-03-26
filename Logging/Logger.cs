@@ -7,53 +7,81 @@ namespace Po.Forms.Logging
     /// <summary>
     /// Class for logging information throughout the entire application.
     /// </summary>
-    public static class Logger
+    public class Logger
     {
+        /// <summary>
+        /// Initializes a new <see cref="Logger"/> instance.
+        /// </summary>
+        /// <param name="form">The default <see cref="Form"/> for this logger.</param>
+        /// <param name="logBox">The default <see cref="TextBox"/> for this logger.</param>
+        public Logger(Form form = null, TextBox logBox = null)
+        {
+            _form = form;
+            _logBox = logBox;
+        }
+
         /// <summary>
         /// Date pattern for logging to text box. Default: "[HH:mm:ss] "
         /// </summary>
-        public static string LogBoxDatePattern = "[HH:mm:ss] ";
+        public string LogBoxDatePattern = "[HH:mm:ss] ";
         /// <summary>
         /// Date pattern for logging to message box. Default: "[HH:mm:ss] "
         /// </summary>
-        public static string MessageDatePattern = "[HH:mm:ss] ";
+        public string MessageDatePattern = "[HH:mm:ss] ";
         /// <summary>
         /// Date pattern for logging to file. Default: "[HH:mm:ss] "
         /// </summary>
-        public static string RecordDatePattern = "[HH:mm:ss] ";
+        public string RecordDatePattern = "[HH:mm:ss] ";
         /// <summary>
         /// Date pattern for log file name. Default: "[yyyy-MM-dd] "
         /// </summary>
-        public static string LogNameDatePattern = "[yyyy-MM-dd] ";
+        public string LogNameDatePattern = "[yyyy-MM-dd] ";
         /// <summary>
         /// Log file name. Default: "Log.txt"
         /// </summary>
-        public static string LogFileName = "Log.txt";
+        public string LogFileName = "Log.txt";
+
+        private TextBox _logBox = null;
+        private Form _form = null;
 
         /// <summary>
-        /// Default <see cref="TextBox"/> for logging.
+        /// Sets the default <see cref="Form"/> and <see cref="TextBox"/> for logging.
         /// </summary>
-        public static TextBox LogBox = null;
+        public void SetDefaults(Form form, TextBox logBox)
+        {
+            _form = form;
+            _logBox = logBox;
+        }
         /// <summary>
-        /// Default <see cref="System.Windows.Forms.Form"/> for logging.
+        /// Sets the default <see cref="Form"/> for logging.
         /// </summary>
-        public static Form Form = null;
+        public void SetDefaultForm(Form form)
+        {
+            _form = form;
+        }
+        /// <summary>
+        /// Sets the default <see cref="TextBox"/> for logging.
+        /// </summary>
+        public void SetDefaultLogBox(TextBox logBox)
+        {
+            _logBox = logBox;
+        }
 
         /// <summary>
-        /// Logs the given info to <see cref="LogBox"/> and file.
+        /// Logs the given info to default <see cref="TextBox"/> and file.
         /// When calling from a different thread, use <see cref="InvokeLog(string, TextBox, Form)"/> or its overloads.
         /// </summary>
-        public static void Log(string info)
+        public void Log(string info)
         {
-            if (LogBox != null)
+            if (_logBox != null)
             {
-                Log(info, LogBox);
+                Log(info, _logBox);
             }
         }
         /// <summary>
         /// Logs the given info to the given <see cref="TextBox"/> and file.
         /// </summary>
-        public static void Log(string info, TextBox log)
+        public void Log(string info, TextBox log)
         {
             if (info == null || info.Trim().Length == 0)
             {
@@ -68,45 +96,45 @@ namespace Po.Forms.Logging
         }
 
         /// <summary>
-        /// Invokes the appending of the given info to <see cref="LogBox"/> in <see cref="Form"/> and file.
+        /// Invokes the appending of the given info to default <see cref="TextBox"/> and file.
         /// </summary>
-        public static void InvokeLog(string info)
+        public void InvokeLog(string info)
         {
-            if (LogBox != null && Form != null)
+            if (_logBox != null && _form != null)
             {
                 if (info == null || info.Trim().Length == 0)
                 {
                     return;
                 }
 
-                if (Form.IsHandleCreated)
+                if (_form.IsHandleCreated)
                 {
-                    Form.Invoke((MethodInvoker)delegate
+                    _form.Invoke((MethodInvoker)delegate
                     {
-                        LogBox.AppendText(GetInfoLine(LogBoxDatePattern, info));
+                        _logBox.AppendText(GetInfoLine(LogBoxDatePattern, info));
                         if (!LogToFile(info, out string ex))
                         {
-                            LogBox.AppendText(GetInfoLine(LogBoxDatePattern, ex));
+                            _logBox.AppendText(GetInfoLine(LogBoxDatePattern, ex));
                         }
                     });
                 }
             }
         }
         /// <summary>
-        /// Invokes the appending of the given info to the given <see cref="TextBox"/> in <see cref="Form"/> and file.
+        /// Invokes the appending of the given info to the given <see cref="TextBox"/> in the default <see cref="Form"/> and file.
         /// </summary>
-        public static void InvokeLog(string info, TextBox log)
+        public void InvokeLog(string info, TextBox log)
         {
-            if (LogBox != null && Form != null)
+            if (_logBox != null && _form != null)
             {
                 if (info == null || info.Trim().Length == 0)
                 {
                     return;
                 }
 
-                if (Form.IsHandleCreated)
+                if (_form.IsHandleCreated)
                 {
-                    Form.Invoke((MethodInvoker)delegate
+                    _form.Invoke((MethodInvoker)delegate
                     {
                         log.AppendText(GetInfoLine(LogBoxDatePattern, info));
                         if (!LogToFile(info, out string ex))
@@ -120,9 +148,9 @@ namespace Po.Forms.Logging
         /// <summary>
         /// Invokes the appending of the given info to the given <see cref="TextBox"/> in the given <see cref="System.Windows.Forms.Form"/> and file.
         /// </summary>
-        public static void InvokeLog(string info, TextBox log, Form form)
+        public void InvokeLog(string info, TextBox log, Form form)
         {
-            if (LogBox != null && Form != null)
+            if (_logBox != null && _form != null)
             {
                 if (info == null || info.Trim().Length == 0)
                 {
@@ -146,7 +174,7 @@ namespace Po.Forms.Logging
         /// <summary>
         /// Pops a <see cref="MessageBox"/> with the given info and writes it to file.
         /// </summary>
-        public static void ShowMessage(string info)
+        public void ShowMessage(string info)
         {
             if (info == null || info.Trim().Length == 0)
             {
@@ -160,11 +188,11 @@ namespace Po.Forms.Logging
         /// <summary>
         /// Writes the given info to file.
         /// </summary>
-        public static bool LogToFile(string info) => LogToFile(info, out _);
+        public bool LogToFile(string info) => LogToFile(info, out _);
         /// <summary>
         /// Writes the given info to file.
         /// </summary>
-        public static bool LogToFile(string info, out string exceptionMessage)
+        public bool LogToFile(string info, out string exceptionMessage)
         {
             exceptionMessage = null;
             if (info == null || info.Trim().Length == 0)
@@ -188,7 +216,7 @@ namespace Po.Forms.Logging
             }
         }
 
-        public static string GetInfoLine(string datePattern, string text)
+        public string GetInfoLine(string datePattern, string text)
         {
             return
                 DateTime.Now.ToString(datePattern) + text + Environment.NewLine;
